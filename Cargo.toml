@@ -1,16 +1,16 @@
 [package]
-name = "pacinfo"
+name = "pacquery"
 version = "0.1.0"
 authors = ["Jelle van der Waa <jelle@archlinux.org>"]
 edition = "2021"
 description = "A CLI tool to provide JSON of provided pacman package(s)."
-documentation = "https://github.com/jelly/pacinfo"
+documentation = "https://github.com/jelly/pacquery"
 readme = "README.md"
 license-file = "LICENSE"
 keywords = ["archlinux", "json", "alpm"]
 categories = ["command-line-utilities"]
 publish = false
-default-run = "pacinfo"
+default-run = "pacquery"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

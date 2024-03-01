@@ -147,7 +147,7 @@ fn jsonify_package<'a>(
     Ok(package)
 }
 
-/// Run pacinfo, returning the json of package(s).
+/// Run pacquery, returning the json of package(s).
 pub fn run(pkgnames: Vec<String>, dbpath: Option<String>, repos: Vec<String>) -> Result<String> {
     // TODO: alpm_utils? https://docs.rs/alpm-utils/latest/alpm_utils/fn.configure_alpm.html
     let pacman = match dbpath {

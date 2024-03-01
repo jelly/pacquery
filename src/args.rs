@@ -1,5 +1,5 @@
 #[derive(Debug, clap::Parser)]
-#[clap(name = "pacinfo", about, author)]
+#[clap(name = "pacquery", about, author)]
 pub struct Args {
     /// List of input packages
     #[arg(required = true)]
