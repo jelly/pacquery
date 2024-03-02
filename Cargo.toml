@@ -13,6 +13,10 @@ publish = false
 default-run = "pacquery"
 
 [[bin]]
+name = "pacquery-completions"
+path = "src/bin/completions.rs"
+
+[[bin]]
 name = "pacquery-mangen"
 path = "src/bin/mangen.rs"
 
@@ -22,6 +26,7 @@ path = "src/bin/mangen.rs"
 alpm = "2.2.3"
 anyhow = "1.0.78"
 clap = { version = "4", features = ["derive"] }
+clap_complete = "4.5.1"
 clap_mangen = "0.2.20"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.109"
