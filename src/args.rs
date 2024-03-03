@@ -16,8 +16,4 @@ pub struct Args {
     /// The path to the pacman database, default ( /var/lib/pacman )
     #[arg(long)]
     pub dbpath: Option<String>,
-
-    /// Only use the pkgnames provided as input
-    #[arg(long)]
-    pub no_reverse_depends: bool,
 }
