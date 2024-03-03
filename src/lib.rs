@@ -91,8 +91,8 @@ fn find_package_anywhere<'a>(pkgname: &str, pacman: &'a alpm::Alpm) -> Result<Pa
     Err(anyhow!(PacinfoError::PackageNotFound))
 }
 
-fn jsonify_package<'a>(
-    package: &'a Package,
+fn jsonify_package(
+    package: &Package,
     reverse_deps_map: &HashMap<String, HashSet<String>>,
 ) -> Result<SyncDBPackage> {
     let package = SyncDBPackage {
