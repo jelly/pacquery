@@ -1,4 +1,4 @@
-use alpm::{Package, SigLevel};
+use alpm::{AlpmList, IntoAlpmListItem, Package, SigLevel};
 use anyhow::{anyhow, Result};
 use error::PacinfoError;
 use serde::{Deserialize, Serialize};
@@ -91,6 +91,21 @@ fn find_package_anywhere<'a>(pkgname: &str, pacman: &'a alpm::Alpm) -> Result<Pa
     Err(anyhow!(PacinfoError::PackageNotFound))
 }
 
+/// A type to enclose various lists, e.g. packages, licenses, ... that are
+/// returned from alpm. This is a newtype around [`AlpmList`].
+struct PacList<'a, T>(AlpmList<'a, T>);
+
+/// Converts [`PacList`] to a list of strings for easy serialization
+impl<'a, T> From<PacList<'a, T>> for Vec<String>
+where
+    T: IntoAlpmListItem<'a, 'a>,
+    T::Borrow: ToString,
+{
+    fn from(list: PacList<'a, T>) -> Self {
+        list.0.into_iter().map(|p| p.to_string()).collect()
+    }
+}
+
 fn jsonify_package(
     package: &Package,
     reverse_deps_map: &HashMap<String, HashSet<String>>,
@@ -103,41 +118,13 @@ fn jsonify_package(
         url: package.url().unwrap_or_default().to_string(),
         packager: package.packager().unwrap_or_default().to_string(),
         builddate: package.build_date(),
-        licenses: package
-            .licenses()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        provides: package
-            .provides()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        replaces: package
-            .replaces()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        depends: package
-            .depends()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        makedepends: package
-            .makedepends()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        checkdepends: package
-            .checkdepends()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
-        optdepends: package
-            .optdepends()
-            .into_iter()
-            .map(|p| p.to_string())
-            .collect(),
+        licenses: PacList(package.licenses()).into(),
+        provides: PacList(package.provides()).into(),
+        replaces: PacList(package.replaces()).into(),
+        depends: PacList(package.depends()).into(),
+        makedepends: PacList(package.makedepends()).into(),
+        checkdepends: PacList(package.checkdepends()).into(),
+        optdepends: PacList(package.optdepends()).into(),
         required_by: reverse_deps_map
             .get(package.name())
             .cloned()
