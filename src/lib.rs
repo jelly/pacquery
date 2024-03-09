@@ -94,7 +94,7 @@ fn get_reverse_deps_map(pacman: &alpm::Alpm) -> HashMap<String, HashSet<String>>
 }
 
 /// Attempt to find any match of a package in the syncdb.
-fn find_package_anywhere<'a>(pkgname: &str, pacman: &'a alpm::Alpm) -> Result<Package<'a>> {
+fn find_package_anywhere<'a>(pkgname: &str, pacman: &'a alpm::Alpm) -> Result<&'a Package> {
     let dbs = pacman.syncdbs();
     for db in dbs {
         if let Ok(pkg) = db.pkg(pkgname) {
@@ -111,8 +111,8 @@ struct PacList<'a, T>(AlpmList<'a, T>);
 /// Converts [`PacList`] to a list of strings for easy serialization
 impl<'a, T> From<PacList<'a, T>> for Vec<String>
 where
-    T: IntoAlpmListItem<'a, 'a>,
-    T::Borrow: ToString,
+    T: IntoAlpmListItem,
+    T: ToString,
 {
     fn from(list: PacList<'a, T>) -> Self {
         list.0.into_iter().map(|p| p.to_string()).collect()
