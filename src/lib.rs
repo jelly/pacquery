@@ -74,19 +74,6 @@ fn get_reverse_deps_map(pacman: &alpm::Alpm) -> HashMap<String, HashSet<String>>
                         modify
                     });
             }
-
-            for dep in pkg.optdepends() {
-                reverse_deps
-                    .entry(dep.name().to_string())
-                    .and_modify(|e| {
-                        e.insert(pkg.name().to_string());
-                    })
-                    .or_insert_with(|| {
-                        let mut modify = HashSet::new();
-                        modify.insert(pkg.name().to_string());
-                        modify
-                    });
-            }
         }
     }
 
